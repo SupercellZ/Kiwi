@@ -1,4 +1,4 @@
-package com.example.kiwi.fragments
+package com.example.kiwi.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

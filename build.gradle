@@ -4,6 +4,7 @@ buildscript {
 
     ext.kotlin_coroutines = "1.3.9"
     ext.live_data = "2.2.0"
+    ext.retrofit = "2.9.0"
 
     repositories {
         google()

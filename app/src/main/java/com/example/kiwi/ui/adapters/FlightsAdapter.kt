@@ -1,12 +1,12 @@
-package com.example.kiwi.adapters
+package com.example.kiwi.ui.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.example.kiwi.fragments.FlightFragment
+import com.example.kiwi.ui.fragments.FlightFragment
 import com.example.kiwi.pojo.Flight
 
-class FlightsAdapter(fragmentManager: FragmentManager, behavior: Int, private val flights : ArrayList<Flight>) :
+class FlightsAdapter(fragmentManager: FragmentManager, behavior: Int, private val flights : MutableList<Flight>) :
     FragmentPagerAdapter(fragmentManager, behavior) {
 
     val MAX_VALUE = 200
@@ -17,6 +17,12 @@ class FlightsAdapter(fragmentManager: FragmentManager, behavior: Int, private va
 
     override fun getCount(): Int {
         return flights.size
+    }
+
+    fun setItems(todayFlights: List<Flight>) {
+        flights.clear()
+        flights.addAll(todayFlights)
+        notifyDataSetChanged()
     }
 
 }
