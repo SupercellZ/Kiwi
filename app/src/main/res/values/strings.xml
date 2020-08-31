@@ -3,4 +3,13 @@
     <string name="network_problem_title">Network Problem</string>
     <string name="network_problem_msg">Please check your internet connection and try again</string>
     <string name="ok">Ok</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="flight">Flight</string>
+    <string name="time">Time</string>
+    <string name="departure">Departure :</string>
+    <string name="arrival">Arrival :</string>
+    <string name="duration">Duration :</string>
+    <string name="price">Price</string>
+    <string name="price_euro">%1$s EUR</string>
 </resources>

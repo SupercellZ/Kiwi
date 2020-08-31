@@ -52,7 +52,7 @@ public class MainViewModel : ViewModel() {
                 showLoading()
 
                 withContext(Dispatchers.IO) {
-                    delay(3_000)
+//                    delay(3_000)
                 }
 
                 val newFlights = FlightsRepo.getNewFlights(todayDate)

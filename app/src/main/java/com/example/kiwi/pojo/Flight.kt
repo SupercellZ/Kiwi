@@ -8,6 +8,8 @@ class Flight(flightResponse: FlightResponse) : Serializable {
     val id = flightResponse.id
     
     val departureDate = Date(flightResponse.dTimeUTC * 1000L)
+    val arrivalDate = Date(flightResponse.aTimeUTC * 1000L)
+
     val timeZone = departureDate.toString().substring(departureDate.toString().indexOf("GMT")).split(" ")[0]
 
     val cityTo = flightResponse.cityTo

@@ -6,6 +6,7 @@ data class FlightResponse (
     @field:Json(name = "id") val id: String,
 
     @field:Json(name = "dTimeUTC") val dTimeUTC: Long,
+    @field:Json(name = "aTimeUTC") val aTimeUTC: Long,
 
     @field:Json(name = "cityTo") val cityTo: String,
     @field:Json(name = "countryTo") val countryTo: Country,
