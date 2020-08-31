@@ -4,11 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.kiwi.repo.FlightsRepo
 import com.example.kiwi.pojo.Flight
-import kotlinx.coroutines.Dispatchers
+import com.example.kiwi.repo.FlightsRepo
+import com.example.kiwi.util.Utils
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.*
 
 
@@ -35,7 +34,7 @@ public class MainViewModel : ViewModel() {
     private var _todayFlights = MutableLiveData<MutableList<Flight>>()
     //endregion
 
-    private var todayDate: Date = Date()
+    private var todayDate: Date? = null
 
     private fun showLoading() {
         _loading.value = true;
@@ -45,18 +44,22 @@ public class MainViewModel : ViewModel() {
         _loading.value = false;
     }
 
-    fun onResume() {
+    fun onResume(todayDate: Date) {
         viewModelScope.launch {
             try {
                 showLoading()
 
-                withContext(Dispatchers.IO) {
-//                    delay(3_000)
-                }
+                val thisTodayDate = this@MainViewModel.todayDate
 
-                val newFlights = FlightsRepo.getNewFlights(todayDate)
+                if (thisTodayDate == null ||
+                    Utils.getDateId(thisTodayDate) != Utils.getDateId(todayDate) /*not same day*/
+                ) { //retrieve from repo
+                    this@MainViewModel.todayDate = todayDate
 
-                _todayFlights.value = newFlights
+                    val newFlights = FlightsRepo.getFlights(todayDate)
+                    _todayFlights.value = newFlights
+                } else //refresh ui, pass same values previously retrieved
+                    _todayFlights.value = _todayFlights.value
 
 //                var x = Date(body.flights[0].dTimeUTC  /*dTimeUTC*/ * 1000L).toString()
 //                x.substring(20).split(" ")[0]

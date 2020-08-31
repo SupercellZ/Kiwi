@@ -12,6 +12,7 @@ import com.example.kiwi.pojo.Flight
 import com.example.kiwi.ui.adapters.FlightsAdapter
 import com.example.kiwi.ui.viewModels.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -73,6 +74,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.onResume()
+        viewModel.onResume(Date())
     }
 }

@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "Flight")
 data class FlightModel(
-    @PrimaryKey val id: String,
+    @PrimaryKey(autoGenerate = false) val id: String,
+    val date: String,
     val cityTo: String
 )

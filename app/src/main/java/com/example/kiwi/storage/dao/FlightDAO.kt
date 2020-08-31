@@ -5,14 +5,18 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.kiwi.storage.model.FlightModel
+import java.util.*
 
 @Dao
 interface FlightDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(flightModels: FlightModel)
+    fun insert(flightModels: List<FlightModel>)
 
+
+    @Query("SELECT * FROM flight WHERE date = :date")
+    fun getAllFlights(date: String) : List<FlightModel>
 
     @Query("SELECT * FROM flight")
-    fun getPreviousFlights() : List<FlightModel>
+    fun getAllFlights() : List<FlightModel>
 }
