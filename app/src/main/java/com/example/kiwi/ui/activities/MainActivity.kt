@@ -27,12 +27,10 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         setupViewModel()
-
-//        setupViewPager(arrayListOf())
     }
 
     private fun setupViewModel() {
-
+        //region progress bar visibility
         viewModel.loading.observe(this) {
             progressBar.visibility =
                 if (it)
@@ -40,6 +38,9 @@ class MainActivity : AppCompatActivity() {
                 else
                     View.GONE
         }
+        //endregion
+
+        //region error visibility
         viewModel.errorLoading.observe(this) {
             if (it) {
                 val builder = with(AlertDialog.Builder(this)) {
@@ -51,37 +52,47 @@ class MainActivity : AppCompatActivity() {
                 builder.show()
             }
         }
+        //endregion
 
+        //region today flights display
         viewModel.todayFlights.observe(this) {
             it?.run {
                 setupViewPager(this)
             }
         }
+        //endregion
     }
 
-    private fun setupViewPager(arrayList: MutableList<Flight>) {
+    private fun setupViewPager(flights: MutableList<Flight>) {
 
         if (this::pagerAdapter.isInitialized) {
 
-            pagerAdapter.setItems(arrayList)
+            //region display today's flights
+            pagerAdapter.setItems(flights)
 
             viewPager.adapter = pagerAdapter
+            //endregion
+
         } else {
 
+            //region initialize adapter & setup viewPager
             pagerAdapter = FlightsAdapter(
                 supportFragmentManager, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
             )
-            pagerAdapter.setItems(arrayList)
+            pagerAdapter.setItems(flights)
 
             viewPager.adapter = pagerAdapter
 
             tabLayout.setupWithViewPager(viewPager, false)
             viewPager.offscreenPageLimit = 10
+            //endregion
         }
     }
 
     override fun onResume() {
         super.onResume()
+
+        //in case date was changed in the device's settings, then invoke viewModel and retrieve today's flights.
         viewModel.onResume(Date())
     }
 }

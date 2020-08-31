@@ -1,10 +1,10 @@
 package com.example.kiwi.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.kiwi.R
 import com.example.kiwi.pojo.Flight
@@ -20,7 +20,7 @@ private const val FLIGHT_KEY = "flight"
  * create an instance of this fragment.
  */
 class FlightFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+
     private lateinit var flight: Flight
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,32 +35,43 @@ class FlightFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
-        val view = inflater.inflate(R.layout.fragment_flight, container, false)
-
-
-        return view
+        return inflater.inflate(R.layout.fragment_flight, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        flightFromTV.text = "${flight.cityFrom}, ${flight.countryFrom}"
-        flightToTV.text = "${flight.cityTo}, ${flight.countryTo}"
 
-        dTimeTV.text = flight.departureDate.toString()
-        aTimeTV.text = flight.arrivalDate.toString()
-        durationTV.text = flight.flightDuration
+        //region display flight data
+        if (flight.cityFrom != null && flight.countryFrom != null)
+            flightFromTV.text = "${flight.cityFrom}, ${flight.countryFrom}"
 
-        priceTV.text = getString(R.string.price_euro, flight.priceInEUR.toString())
+        if (flight.cityTo != null && flight.countryTo != null)
+            flightToTV.text = "${flight.cityTo}, ${flight.countryTo}"
+
+        flight.departureDate?.run {
+            dTimeTV.text = this.toString()
+        }
+
+        flight.arrivalDate?.run {
+            aTimeTV.text = this.toString()
+        }
+
+        flight.flightDuration?.run {
+            durationTV.text = this
+        }
+
+        flight.priceInEUR?.run {
+            priceTV.text = getString(R.string.price_euro, this.toString())
+        }
 
         Glide.with(this)
             .load("https://images.kiwi.com/photos/600x330/${flight.picId}.jpg")
             .into(picIV)
+        //endregion
     }
 
     companion object {
 
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(flight: Flight) =
             FlightFragment().apply {

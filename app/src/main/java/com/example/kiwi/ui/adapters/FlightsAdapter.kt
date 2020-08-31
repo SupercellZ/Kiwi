@@ -14,25 +14,11 @@ class FlightsAdapter(fragmentManager: FragmentManager, behavior: Int) :
     private val fragments: MutableList<FlightFragment> = arrayListOf()
 
     override fun getItem(position: Int): Fragment {
-//        return FlightFragment.newInstance(flights[position])
         return fragments[position]
     }
 
     override fun getCount(): Int {
         return fragments.size
-    }
-
-//    override fun getItemPosition(wtf: Any): Int {
-//        val indexOf = fragments.indexOf(wtf)
-//        return if (indexOf >= 0)
-//            PagerAdapter.POSITION_UNCHANGED
-//        else
-//            PagerAdapter.POSITION_NONE
-//    }
-
-    fun clear() {
-        fragments.clear()
-        notifyDataSetChanged()
     }
 
     fun setItems(todayFlights: List<Flight>) {
@@ -44,10 +30,4 @@ class FlightsAdapter(fragmentManager: FragmentManager, behavior: Int) :
 
         notifyDataSetChanged()
     }
-
-    fun removeAt(position: Int) {
-        fragments.removeAt(position)
-        notifyDataSetChanged()
-    }
-
 }

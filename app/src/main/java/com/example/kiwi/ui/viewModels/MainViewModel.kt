@@ -1,6 +1,5 @@
 package com.example.kiwi.ui.viewModels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,10 +11,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 
-public class MainViewModel : ViewModel() {
-
-//    var x = Date(1601792400  /*dTimeUTC*/ * 1000L).toString()
-//    x.substring(20).split(" ")[0]
+class MainViewModel : ViewModel() {
 
     //region loading LiveData
     val loading: LiveData<Boolean>
@@ -50,24 +46,17 @@ public class MainViewModel : ViewModel() {
             try {
                 showLoading()
 
-//                val thisTodayDate = this@MainViewModel.todayDate
-
                 if (todayDate == null ||
                     Utils.getDateId(todayDate!!) != Utils.getDateId(todayDateActivity) /*not same day*/
                 ) { //retrieve from repo
                     todayDate = todayDateActivity
 
                     val newFlights = FlightsRepo.getFlights(todayDate!!)
-                    Log.e("MainViewModel", "newFlights : $newFlights")
                     _todayFlights.value = newFlights
                 } else { //refresh ui, pass same values previously retrieved
-
-                    Log.e("MainViewModel", "_todayFlights.value : $_todayFlights.value")
                     _todayFlights.value = _todayFlights.value
                 }
 
-//                var x = Date(body.flights[0].dTimeUTC  /*dTimeUTC*/ * 1000L).toString()
-//                x.substring(20).split(" ")[0]
             } catch (e: Exception) {
                 e.printStackTrace()
                 _errorLoading.value = true

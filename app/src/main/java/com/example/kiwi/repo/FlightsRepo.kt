@@ -14,21 +14,23 @@ class FlightsRepo {
 
     companion object {
 
-        private val max_results = 5
+        private const val max_results = 5
 
 
+        /**
+         * Get Flights either from database or from API , based on Today's date and if flights were previously saved.
+         */
         suspend fun getFlights(todayDate: Date): MutableList<Flight> {
             return withContext(Dispatchers.IO) {
 
-                val todayDateID = Utils.getDateId(todayDate)
-
                 val results: MutableList<Flight> = arrayListOf()
 
-                //invoke API
+                val todayDateID = Utils.getDateId(todayDate)
 
                 val database = App.app.getMyComponent().getAppDatabase()
                 val flightDAO = database.getFlightDAO()
 
+                //get saved flights in database
                 val allPreviousFlights = flightDAO.getAllFlights()
                 val todayFlights = flightDAO.getAllFlights(todayDateID)
 
@@ -45,7 +47,7 @@ class FlightsRepo {
                     val filtered =
                         if (previousCities.isEmpty()) //no previous cities, all flights are valid
                             flights
-                        else //filter out cities already fetches before
+                        else //filter out cities already fetched before
                             flights.filter { flightResponse ->
                                 !previousCities.contains(
                                     flightResponse.cityTo
@@ -86,9 +88,6 @@ class FlightsRepo {
 
                 }
 
-
-                //convert FlightResponse to list of Flight
-//                flightsResponse.toFlights().subList(0, 5)
                 results
             }
         }
