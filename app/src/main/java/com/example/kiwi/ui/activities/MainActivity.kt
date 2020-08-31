@@ -24,13 +24,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
         setupViewModel()
 
 //        setupViewPager(arrayListOf())
     }
 
     private fun setupViewModel() {
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         viewModel.loading.observe(this) {
             progressBar.visibility =
@@ -52,24 +53,31 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.todayFlights.observe(this) {
-            setupViewPager(it)
+            it?.run {
+                setupViewPager(this)
+            }
         }
     }
 
     private fun setupViewPager(arrayList: MutableList<Flight>) {
-//        val flights: ArrayList<Flight> = arrayListOf();
 
-//        for (i in 0..4)
-//            flights.add(Flight())
+        if (this::pagerAdapter.isInitialized) {
 
-        pagerAdapter = FlightsAdapter(
-            supportFragmentManager, FragmentPagerAdapter.POSITION_NONE,
-            arrayList
-        )
+            pagerAdapter.setItems(arrayList)
 
-        viewPager.adapter = pagerAdapter
+            viewPager.adapter = pagerAdapter
+        } else {
 
-        tabLayout.setupWithViewPager(viewPager, false)
+            pagerAdapter = FlightsAdapter(
+                supportFragmentManager, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+            )
+            pagerAdapter.setItems(arrayList)
+
+            viewPager.adapter = pagerAdapter
+
+            tabLayout.setupWithViewPager(viewPager, false)
+            viewPager.offscreenPageLimit = 10
+        }
     }
 
     override fun onResume() {

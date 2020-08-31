@@ -17,7 +17,6 @@ class FlightsRepo {
         private val max_results = 5
 
 
-
         suspend fun getFlights(todayDate: Date): MutableList<Flight> {
             return withContext(Dispatchers.IO) {
 
@@ -26,7 +25,6 @@ class FlightsRepo {
                 val results: MutableList<Flight> = arrayListOf()
 
                 //invoke API
-                val flights = FlightService.create().getFlights().flights
 
                 val database = App.app.getMyComponent().getAppDatabase()
                 val flightDAO = database.getFlightDAO()
@@ -35,6 +33,9 @@ class FlightsRepo {
                 val todayFlights = flightDAO.getAllFlights(todayDateID)
 
                 if (todayFlights.isEmpty()) { //didn't fetch anything yet for today
+
+                    val flights1 = FlightService.create().getFlights()
+                    val flights = flights1.flights
 
                     //region today is a new day
                     //get previous cities
@@ -57,11 +58,21 @@ class FlightsRepo {
                         results.addAll(FlightsMainResponse.toFlights(subList))
 
                         //region save to database
-                        val dbModels = results.map { flight ->
+                        val dbModels = subList.map { flight ->
                             FlightModel(
-                                id = flight.id,
-                                date = todayDateID,
-                                cityTo = flight.cityTo
+                                flight.id,
+                                todayDateID,
+                                flight.dTimeUTC,
+                                flight.aTimeUTC,
+                                flight.cityTo,
+                                flight.countryTo.name,
+                                flight.cityFrom,
+                                flight.countryFrom.name,
+                                flight.flightDuration,
+                                flight.priceInEUR,
+                                flight.picId,
+                                flight.flyFrom,
+                                flight.flyTo
                             )
                         }
                         flightDAO.insert(dbModels)
@@ -69,13 +80,10 @@ class FlightsRepo {
                     }
                     //endregion
 
-                } else { //filter already fetched flight
+                } else { //use the saved flights in database
 
-                    val todayFlightIds = todayFlights.map { flightModel -> flightModel.id }
+                    results.addAll(FlightModel.toFlights(todayFlights))
 
-                    val filtered = flights.filter { flightResponse ->  todayFlightIds.contains(flightResponse.id)}
-
-                    results.addAll(FlightsMainResponse.toFlights(filtered))
                 }
 
 

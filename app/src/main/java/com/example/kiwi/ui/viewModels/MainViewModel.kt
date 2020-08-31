@@ -1,5 +1,6 @@
 package com.example.kiwi.ui.viewModels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,7 +30,7 @@ public class MainViewModel : ViewModel() {
     //endregion
 
     //region flights LiveData
-    val todayFlights: LiveData<MutableList<Flight>>
+    val todayFlights: LiveData<MutableList<Flight>?>
         get() = _todayFlights
     private var _todayFlights = MutableLiveData<MutableList<Flight>>()
     //endregion
@@ -44,22 +45,26 @@ public class MainViewModel : ViewModel() {
         _loading.value = false;
     }
 
-    fun onResume(todayDate: Date) {
+    fun onResume(todayDateActivity: Date) {
         viewModelScope.launch {
             try {
                 showLoading()
 
-                val thisTodayDate = this@MainViewModel.todayDate
+//                val thisTodayDate = this@MainViewModel.todayDate
 
-                if (thisTodayDate == null ||
-                    Utils.getDateId(thisTodayDate) != Utils.getDateId(todayDate) /*not same day*/
+                if (todayDate == null ||
+                    Utils.getDateId(todayDate!!) != Utils.getDateId(todayDateActivity) /*not same day*/
                 ) { //retrieve from repo
-                    this@MainViewModel.todayDate = todayDate
+                    todayDate = todayDateActivity
 
-                    val newFlights = FlightsRepo.getFlights(todayDate)
+                    val newFlights = FlightsRepo.getFlights(todayDate!!)
+                    Log.e("MainViewModel", "newFlights : $newFlights")
                     _todayFlights.value = newFlights
-                } else //refresh ui, pass same values previously retrieved
+                } else { //refresh ui, pass same values previously retrieved
+
+                    Log.e("MainViewModel", "_todayFlights.value : $_todayFlights.value")
                     _todayFlights.value = _todayFlights.value
+                }
 
 //                var x = Date(body.flights[0].dTimeUTC  /*dTimeUTC*/ * 1000L).toString()
 //                x.substring(20).split(" ")[0]

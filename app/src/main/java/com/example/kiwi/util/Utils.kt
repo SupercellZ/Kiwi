@@ -10,7 +10,7 @@ class Utils {
             val day = calendar.get(Calendar.DAY_OF_MONTH)
             val month = calendar.get(Calendar.MONTH)
             val year = calendar.get(Calendar.YEAR)
-            return "$day-${month}-${year}"
+            return "$day-${month + 1}-${year}"
         }
     }
 }

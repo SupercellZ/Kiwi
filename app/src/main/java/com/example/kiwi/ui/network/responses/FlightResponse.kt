@@ -2,7 +2,7 @@ package com.example.kiwi.ui.network.responses
 
 import com.squareup.moshi.Json
 
-data class FlightResponse (
+data class FlightResponse(
     @field:Json(name = "id") val id: String,
 
     @field:Json(name = "dTimeUTC") val dTimeUTC: Long,
@@ -18,5 +18,8 @@ data class FlightResponse (
 
     @field:Json(name = "price") val priceInEUR: Int,
 
-    @field:Json(name = "mapIdto") val picId: String
+    @field:Json(name = "mapIdto") val picId: String,
+
+    @field:Json(name = "flyFrom") val flyFrom: String,
+    @field:Json(name = "flyTo") val flyTo: String
 )

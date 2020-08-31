@@ -14,7 +14,7 @@ interface FlightDAO {
     fun insert(flightModels: List<FlightModel>)
 
 
-    @Query("SELECT * FROM flight WHERE date = :date")
+    @Query("SELECT * FROM flight WHERE dateId = :date")
     fun getAllFlights(date: String) : List<FlightModel>
 
     @Query("SELECT * FROM flight")

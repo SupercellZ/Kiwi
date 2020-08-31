@@ -12,4 +12,5 @@
     <string name="duration">Duration :</string>
     <string name="price">Price</string>
     <string name="price_euro">%1$s EUR</string>
+    <string name="today_offers">Today\'s Offers</string>
 </resources>
