@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.example.kiwi.R
 import com.example.kiwi.pojo.Flight
 import kotlinx.android.synthetic.main.fragment_flight.*
@@ -51,6 +52,10 @@ class FlightFragment : Fragment() {
         durationTV.text = flight.flightDuration
 
         priceTV.text = getString(R.string.price_euro, flight.priceInEUR.toString())
+
+        Glide.with(this)
+            .load("https://images.kiwi.com/photos/600x330/${flight.picId}.jpg")
+            .into(picIV)
     }
 
     companion object {

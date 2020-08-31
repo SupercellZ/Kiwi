@@ -16,5 +16,7 @@ data class FlightResponse (
 
     @field:Json(name = "fly_duration") val flightDuration: String,
 
-    @field:Json(name = "price") val priceInEUR: Int
+    @field:Json(name = "price") val priceInEUR: Int,
+
+    @field:Json(name = "mapIdto") val picId: String
 )

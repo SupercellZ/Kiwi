@@ -21,4 +21,6 @@ class Flight(flightResponse: FlightResponse) : Serializable {
     val flightDuration  = flightResponse.flightDuration
     
     val priceInEUR = flightResponse.priceInEUR
+
+    val picId = flightResponse.picId
 }
